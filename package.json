@@ -1,6 +1,6 @@
 {
 	"name": "hearts-of-iron-4-focus-trees-inverter",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "CLI tool for inverting focus trees in Hearts of Iron 4",
 	"private": false,
 	"main": "./dist/src/main.js",
