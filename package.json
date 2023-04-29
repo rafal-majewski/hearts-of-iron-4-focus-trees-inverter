@@ -49,6 +49,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"dotenv": "^16.0.3"
+		"dotenv": "^16.0.3",
+		"jomini": "^0.8.1",
+		"zod": "^3.21.4"
 	}
 }
