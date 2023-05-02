@@ -7,7 +7,11 @@ export type FocusPosition = {
 export type Focus = {
 	id: string;
 	position: FocusPosition;
-	prerequiredFocusIds: string[];
+	prerequiredFocusIds: {
+		allOf: {
+			anyOf: string[];
+		}[];
+	};
 
 	additionalProperties: Record<string, unknown>;
 };

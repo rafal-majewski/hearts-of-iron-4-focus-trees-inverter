@@ -14,7 +14,7 @@ const focusTreeFromJominiParseTextResultSchema = Zod.object({
 				y: Zod.number(),
 				prerequisite: Zod.array(
 					Zod.object({
-						focus: Zod.string(),
+						focus: Zod.array(Zod.string()),
 					})
 				).optional(),
 				relative_position_id: Zod.string().optional(),
@@ -27,10 +27,11 @@ const focusTreeFromJominiParseTextResultSchema = Zod.object({
 						y: y,
 						relativeToFocusId: relative_position_id ?? null,
 					},
-					prerequiredFocusIds:
-						prerequisite === undefined
-							? []
-							: prerequisite.map((prerequisite) => prerequisite.focus),
+					prerequiredFocusIds: {
+						allOf: (prerequisite || []).map(({focus}) => ({
+							anyOf: focus,
+						})),
+					},
 					additionalProperties: rest,
 				}))
 		)
@@ -51,6 +52,7 @@ export default function parseFocusTreeFromString(focusTreeString: string): Focus
 	const jominiFocusTree = jomini.parseText(focusTreeString);
 	Jomini.toArray(jominiFocusTree, "focus_tree.focus");
 	Jomini.toArray(jominiFocusTree, "focus_tree.focus.prerequisite");
+	Jomini.toArray(jominiFocusTree, "focus_tree.focus.prerequisite.focus");
 	const focusTree: FocusTree = focusTreeFromJominiParseTextResultSchema.parse(jominiFocusTree);
 
 	return focusTree;

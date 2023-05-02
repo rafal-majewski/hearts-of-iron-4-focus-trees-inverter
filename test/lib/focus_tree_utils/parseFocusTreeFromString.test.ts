@@ -2,7 +2,7 @@ import {test, expect, describe} from "vitest";
 
 import parseFocusTreeFromString from "../../../src/lib/focus_tree_utils/parseFocusTreeFromString.js";
 
-describe("parseFocusTreeFromString", () => {
+describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with no focuses", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
@@ -39,7 +39,9 @@ describe("parseFocusTreeFromString", () => {
 						y: 0,
 						relativeToFocusId: null,
 					},
-					prerequiredFocusIds: [],
+					prerequiredFocusIds: {
+						allOf: [],
+					},
 					additionalProperties: {},
 				},
 			],
@@ -72,7 +74,53 @@ describe("parseFocusTreeFromString", () => {
 						y: 0,
 						relativeToFocusId: null,
 					},
-					prerequiredFocusIds: ["test_prerequisite"],
+					prerequiredFocusIds: {
+						allOf: [
+							{
+								anyOf: ["test_prerequisite"],
+							},
+						],
+					},
+					additionalProperties: {},
+				},
+			],
+			additionalProperties: {},
+		});
+	});
+
+	test("Minimal focus tree with one minimal focus with two prerequisites where only one is required", () => {
+		const focusTree = parseFocusTreeFromString(`
+			focus_tree = {
+				id = "test"
+				focus = {
+					id = "test_focus"
+					x = 0
+					y = 0
+					prerequisite = {
+						focus = "test_prerequisite"
+						focus = "test_prerequisite_2"
+					}
+				}
+			}
+		`);
+
+		expect(focusTree).toEqual({
+			id: "test",
+			focuses: [
+				{
+					id: "test_focus",
+					position: {
+						x: 0,
+						y: 0,
+						relativeToFocusId: null,
+					},
+					prerequiredFocusIds: {
+						allOf: [
+							{
+								anyOf: ["test_prerequisite", "test_prerequisite_2"],
+							},
+						],
+					},
 					additionalProperties: {},
 				},
 			],
@@ -103,7 +151,9 @@ describe("parseFocusTreeFromString", () => {
 						y: 0,
 						relativeToFocusId: "test_relative_position",
 					},
-					prerequiredFocusIds: [],
+					prerequiredFocusIds: {
+						allOf: [],
+					},
 					additionalProperties: {},
 				},
 			],
@@ -137,7 +187,13 @@ describe("parseFocusTreeFromString", () => {
 						y: 0,
 						relativeToFocusId: "test_relative_position",
 					},
-					prerequiredFocusIds: ["test_prerequisite"],
+					prerequiredFocusIds: {
+						allOf: [
+							{
+								anyOf: ["test_prerequisite"],
+							},
+						],
+					},
 					additionalProperties: {},
 				},
 			],
@@ -174,7 +230,13 @@ describe("parseFocusTreeFromString", () => {
 						y: 0,
 						relativeToFocusId: "test_relative_position",
 					},
-					prerequiredFocusIds: ["test_prerequisite"],
+					prerequiredFocusIds: {
+						allOf: [
+							{
+								anyOf: ["test_prerequisite"],
+							},
+						],
+					},
 					additionalProperties: {
 						completion_reward: {
 							add_ideas: "HOA_state_bank_idea",
@@ -219,7 +281,9 @@ describe("parseFocusTreeFromString", () => {
 						y: 0,
 						relativeToFocusId: null,
 					},
-					prerequiredFocusIds: [],
+					prerequiredFocusIds: {
+						allOf: [],
+					},
 					additionalProperties: {},
 				},
 			],
@@ -276,7 +340,9 @@ describe("parseFocusTreeFromString", () => {
 						y: 0,
 						relativeToFocusId: null,
 					},
-					prerequiredFocusIds: [],
+					prerequiredFocusIds: {
+						allOf: [],
+					},
 					additionalProperties: {},
 				},
 				{
@@ -286,7 +352,9 @@ describe("parseFocusTreeFromString", () => {
 						y: 0,
 						relativeToFocusId: null,
 					},
-					prerequiredFocusIds: [],
+					prerequiredFocusIds: {
+						allOf: [],
+					},
 					additionalProperties: {},
 				},
 			],
