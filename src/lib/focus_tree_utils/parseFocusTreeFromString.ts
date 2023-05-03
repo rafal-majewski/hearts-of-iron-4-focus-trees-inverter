@@ -1,6 +1,6 @@
-import type {FocusTree} from "../focus_tree/index.js";
 import * as Jomini from "jomini";
 import Zod from "zod";
+import {DedicatedFocusTree, type FocusTree} from "../focus_tree/index.js";
 
 const jomini = await Jomini.Jomini.initialize();
 
@@ -53,7 +53,8 @@ export default function parseFocusTreeFromString(focusTreeString: string): Focus
 	Jomini.toArray(jominiFocusTree, "focus_tree.focus");
 	Jomini.toArray(jominiFocusTree, "focus_tree.focus.prerequisite");
 	Jomini.toArray(jominiFocusTree, "focus_tree.focus.prerequisite.focus");
-	const focusTree: FocusTree = focusTreeFromJominiParseTextResultSchema.parse(jominiFocusTree);
+	const parseResult = focusTreeFromJominiParseTextResultSchema.parse(jominiFocusTree);
+	const focusTree = new DedicatedFocusTree(parseResult);
 
 	return focusTree;
 }
