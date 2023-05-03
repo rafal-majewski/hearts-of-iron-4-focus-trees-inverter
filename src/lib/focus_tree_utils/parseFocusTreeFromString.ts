@@ -6,7 +6,6 @@ const jomini = await Jomini.Jomini.initialize();
 
 const focusTreeFromJominiParseTextResultSchema = Zod.object({
 	focus_tree: Zod.object({
-		id: Zod.string(),
 		focus: Zod.array(
 			Zod.object({
 				id: Zod.string(),

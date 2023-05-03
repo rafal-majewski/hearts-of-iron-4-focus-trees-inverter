@@ -6,12 +6,10 @@ describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with no focuses", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 			}
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [],
 			additionalProperties: {},
 		});
@@ -20,7 +18,6 @@ describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with one minimal focus", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 				focus = {
 					id = "test_focus"
 					x = 0
@@ -30,7 +27,6 @@ describe("parseFocusTreeFromString", async () => {
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [
 				{
 					id: "test_focus",
@@ -52,7 +48,6 @@ describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with one minimal focus with a prerequisite", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 				focus = {
 					id = "test_focus"
 					x = 0
@@ -65,7 +60,6 @@ describe("parseFocusTreeFromString", async () => {
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [
 				{
 					id: "test_focus",
@@ -91,7 +85,6 @@ describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with one minimal focus with two prerequisites where only one is required", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 				focus = {
 					id = "test_focus"
 					x = 0
@@ -105,7 +98,6 @@ describe("parseFocusTreeFromString", async () => {
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [
 				{
 					id: "test_focus",
@@ -131,7 +123,6 @@ describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with one minimal focus with a relative position", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 				focus = {
 					id = "test_focus"
 					x = 0
@@ -142,7 +133,6 @@ describe("parseFocusTreeFromString", async () => {
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [
 				{
 					id: "test_focus",
@@ -164,7 +154,6 @@ describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with one minimal focus with a relative position and a prerequisite", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 				focus = {
 					id = "test_focus"
 					x = 0
@@ -178,7 +167,6 @@ describe("parseFocusTreeFromString", async () => {
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [
 				{
 					id: "test_focus",
@@ -204,7 +192,6 @@ describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with one focus with additional properties", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 				focus = {
 					id = "test_focus"
 					x = 0
@@ -221,7 +208,6 @@ describe("parseFocusTreeFromString", async () => {
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [
 				{
 					id: "test_focus",
@@ -250,7 +236,6 @@ describe("parseFocusTreeFromString", async () => {
 	test("Focus tree with additional properties with one minimal focus", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 				country = {
 					factor = 0
 					modifier = {
@@ -272,7 +257,6 @@ describe("parseFocusTreeFromString", async () => {
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [
 				{
 					id: "test_focus",
@@ -306,7 +290,6 @@ describe("parseFocusTreeFromString", async () => {
 		expect(() =>
 			parseFocusTreeFromString(`
 				focus_tree = {
-					id = "test"
 				}
 				something_bad = "test"
 			`)
@@ -316,7 +299,6 @@ describe("parseFocusTreeFromString", async () => {
 	test("Minimal focus tree with multiple minimal focuses", () => {
 		const focusTree = parseFocusTreeFromString(`
 			focus_tree = {
-				id = "test"
 				focus = {
 					id = "test_focus_1"
 					x = 0
@@ -331,7 +313,6 @@ describe("parseFocusTreeFromString", async () => {
 		`);
 
 		expect(focusTree).toEqual({
-			id: "test",
 			focuses: [
 				{
 					id: "test_focus_1",
