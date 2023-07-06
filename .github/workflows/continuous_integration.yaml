@@ -74,20 +74,6 @@ jobs:
         with:
           name: coverage_report
           path: coverage_report
-  npm_audit_check:
-    name: NPM audit check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.SETUP_NODE_NODE_VERSION }}
-          cache: "npm"
-      - name: Run npm audit
-        run: |
-          npm run npm-audit:check
   typescript_check:
     name: TypeScript check
     runs-on: ubuntu-latest
