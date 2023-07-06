@@ -41,7 +41,7 @@
 		"@vitest/coverage-c8": "^0.32.4",
 		"eslint": "^8.44.0",
 		"nodemon": "^2.0.22",
-		"prettier": "^2.8.8",
+		"prettier": "^3.0.0",
 		"release-it": "^15.10.3",
 		"ts-node": "^10.9.1",
 		"typescript": "^5.0.3",
