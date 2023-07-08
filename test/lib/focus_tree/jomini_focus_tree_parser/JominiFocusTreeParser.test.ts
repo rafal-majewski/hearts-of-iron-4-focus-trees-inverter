@@ -1,10 +1,16 @@
 import {test, expect, describe} from "vitest";
 
-import parseFocusTreeFromString from "../../../src/lib/focus_tree_utils/parseFocusTreeFromString.js";
-
-describe("parseFocusTreeFromString", async () => {
-	test("Minimal focus tree with no focuses", () => {
-		const focusTree = parseFocusTreeFromString(`
+import * as jomini from "jomini";
+import {JominiFocusTreeParser} from "../../../../src/lib/focus_tree/jomini_focus_tree_parser/JominiFocusTreeParser.js";
+async function createJominiFocusTreeParser() {
+	return new JominiFocusTreeParser({
+		jominiInstance: await jomini.Jomini.initialize(),
+	});
+}
+describe("JominiFocusTreeParser", async () => {
+	test("Minimal focus tree with no focuses", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 			}
 		`);
@@ -15,8 +21,10 @@ describe("parseFocusTreeFromString", async () => {
 		});
 	});
 
-	test("Minimal focus tree with one minimal focus", () => {
-		const focusTree = parseFocusTreeFromString(`
+	test("Minimal focus tree with one minimal focus", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 				focus = {
 					id = "test_focus"
@@ -45,8 +53,10 @@ describe("parseFocusTreeFromString", async () => {
 		});
 	});
 
-	test("Minimal focus tree with one minimal focus with a prerequisite", () => {
-		const focusTree = parseFocusTreeFromString(`
+	test("Minimal focus tree with one minimal focus with a prerequisite", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 				focus = {
 					id = "test_focus"
@@ -82,8 +92,10 @@ describe("parseFocusTreeFromString", async () => {
 		});
 	});
 
-	test("Minimal focus tree with one minimal focus with two prerequisites where only one is required", () => {
-		const focusTree = parseFocusTreeFromString(`
+	test("Minimal focus tree with one minimal focus with two prerequisites where only one is required", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 				focus = {
 					id = "test_focus"
@@ -120,8 +132,10 @@ describe("parseFocusTreeFromString", async () => {
 		});
 	});
 
-	test("Minimal focus tree with one minimal focus with a relative position", () => {
-		const focusTree = parseFocusTreeFromString(`
+	test("Minimal focus tree with one minimal focus with a relative position", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 				focus = {
 					id = "test_focus"
@@ -151,8 +165,10 @@ describe("parseFocusTreeFromString", async () => {
 		});
 	});
 
-	test("Minimal focus tree with one minimal focus with a relative position and a prerequisite", () => {
-		const focusTree = parseFocusTreeFromString(`
+	test("Minimal focus tree with one minimal focus with a relative position and a prerequisite", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 				focus = {
 					id = "test_focus"
@@ -189,8 +205,10 @@ describe("parseFocusTreeFromString", async () => {
 		});
 	});
 
-	test("Minimal focus tree with one focus with additional properties", () => {
-		const focusTree = parseFocusTreeFromString(`
+	test("Minimal focus tree with one focus with additional properties", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 				focus = {
 					id = "test_focus"
@@ -233,8 +251,10 @@ describe("parseFocusTreeFromString", async () => {
 			additionalProperties: {},
 		});
 	});
-	test("Focus tree with additional properties with one minimal focus", () => {
-		const focusTree = parseFocusTreeFromString(`
+	test("Focus tree with additional properties with one minimal focus", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 				country = {
 					factor = 0
@@ -286,9 +306,11 @@ describe("parseFocusTreeFromString", async () => {
 		});
 	});
 
-	test("Focus tree with a forbidden field", () => {
+	test("Focus tree with a forbidden field", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
 		expect(() =>
-			parseFocusTreeFromString(`
+			jominiFocusTreeParser.parseFocusTreeFromString(`
 				focus_tree = {
 				}
 				something_bad = "test"
@@ -296,8 +318,10 @@ describe("parseFocusTreeFromString", async () => {
 		).toThrow();
 	});
 
-	test("Minimal focus tree with multiple minimal focuses", () => {
-		const focusTree = parseFocusTreeFromString(`
+	test("Minimal focus tree with multiple minimal focuses", async () => {
+		const jominiFocusTreeParser = await createJominiFocusTreeParser();
+
+		const focusTree = jominiFocusTreeParser.parseFocusTreeFromString(`
 			focus_tree = {
 				focus = {
 					id = "test_focus_1"
