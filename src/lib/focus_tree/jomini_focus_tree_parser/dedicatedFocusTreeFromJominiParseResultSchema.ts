@@ -10,8 +10,12 @@ export const dedicatedFocusTreeFromJominiParseResultSchema = zod
 			})
 			.passthrough(),
 	})
-	.strict()
+	.passthrough()
 	.transform(
-		({focus_tree: {focus, ...rest}}) =>
-			new DedicatedFocusTree({focuses: focus ?? [], additionalProperties: rest})
+		({focus_tree: {focus, ...focusTreeRest}, ...globalRest}) =>
+			new DedicatedFocusTree({
+				focuses: focus ?? [],
+				additionalFocusTreeProperties: focusTreeRest,
+				additionalGlobalProperties: globalRest,
+			})
 	);

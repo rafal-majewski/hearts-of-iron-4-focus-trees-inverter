@@ -1,7 +1,7 @@
 export type FocusPosition = {
 	x: number;
 	y: number;
-	relativeToFocusId: string | null;
+	relativeToFocusIds: string[];
 };
 
 export type Focus = {

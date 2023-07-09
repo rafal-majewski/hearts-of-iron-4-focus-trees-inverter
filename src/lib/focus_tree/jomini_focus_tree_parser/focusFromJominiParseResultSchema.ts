@@ -8,11 +8,11 @@ export const focusFromJominiParseResultSchema = zod
 		prerequisite: zod
 			.array(
 				zod.object({
-					focus: zod.array(zod.string()),
+					focus: zod.array(zod.string()).optional(),
 				})
 			)
 			.optional(),
-		relative_position_id: zod.string().optional(),
+		relative_position_id: zod.array(zod.string()).optional(),
 	})
 	.passthrough()
 	.transform(({id, x, y, relative_position_id, prerequisite, ...rest}) => ({
@@ -20,12 +20,16 @@ export const focusFromJominiParseResultSchema = zod
 		position: {
 			x: x,
 			y: y,
-			relativeToFocusId: relative_position_id ?? null,
+			relativeToFocusIds: relative_position_id ?? [],
 		},
 		prerequiredFocusIds: {
-			allOf: (prerequisite || []).map(({focus}) => ({
-				anyOf: focus,
-			})),
+			allOf: (prerequisite || [])
+				.filter(
+					(prerequisite): prerequisite is {focus: string[]} => prerequisite.focus !== undefined
+				)
+				.map(({focus}) => ({
+					anyOf: focus,
+				})),
 		},
 		additionalProperties: rest,
 	}));

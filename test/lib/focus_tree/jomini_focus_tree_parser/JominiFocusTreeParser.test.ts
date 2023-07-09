@@ -1,4 +1,7 @@
 import {test, expect, describe} from "vitest";
+import * as url from "url";
+import * as path from "path";
+import * as fs from "fs/promises";
 
 import * as jomini from "jomini";
 import {JominiFocusTreeParser} from "../../../../src/lib/focus_tree/jomini_focus_tree_parser/JominiFocusTreeParser.js";
@@ -17,7 +20,8 @@ describe("JominiFocusTreeParser", async () => {
 
 		expect(focusTree).toEqual({
 			focuses: [],
-			additionalProperties: {},
+			additionalGlobalProperties: {},
+			additionalFocusTreeProperties: {},
 		});
 	});
 
@@ -41,7 +45,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: null,
+						relativeToFocusIds: [],
 					},
 					prerequiredFocusIds: {
 						allOf: [],
@@ -49,7 +53,8 @@ describe("JominiFocusTreeParser", async () => {
 					additionalProperties: {},
 				},
 			],
-			additionalProperties: {},
+			additionalFocusTreeProperties: {},
+			additionalGlobalProperties: {},
 		});
 	});
 
@@ -76,7 +81,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: null,
+						relativeToFocusIds: [],
 					},
 					prerequiredFocusIds: {
 						allOf: [
@@ -88,7 +93,8 @@ describe("JominiFocusTreeParser", async () => {
 					additionalProperties: {},
 				},
 			],
-			additionalProperties: {},
+			additionalFocusTreeProperties: {},
+			additionalGlobalProperties: {},
 		});
 	});
 
@@ -116,7 +122,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: null,
+						relativeToFocusIds: [],
 					},
 					prerequiredFocusIds: {
 						allOf: [
@@ -128,7 +134,8 @@ describe("JominiFocusTreeParser", async () => {
 					additionalProperties: {},
 				},
 			],
-			additionalProperties: {},
+			additionalFocusTreeProperties: {},
+			additionalGlobalProperties: {},
 		});
 	});
 
@@ -153,7 +160,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: "test_relative_position",
+						relativeToFocusIds: ["test_relative_position"],
 					},
 					prerequiredFocusIds: {
 						allOf: [],
@@ -161,7 +168,8 @@ describe("JominiFocusTreeParser", async () => {
 					additionalProperties: {},
 				},
 			],
-			additionalProperties: {},
+			additionalFocusTreeProperties: {},
+			additionalGlobalProperties: {},
 		});
 	});
 
@@ -189,7 +197,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: "test_relative_position",
+						relativeToFocusIds: ["test_relative_position"],
 					},
 					prerequiredFocusIds: {
 						allOf: [
@@ -201,7 +209,8 @@ describe("JominiFocusTreeParser", async () => {
 					additionalProperties: {},
 				},
 			],
-			additionalProperties: {},
+			additionalFocusTreeProperties: {},
+			additionalGlobalProperties: {},
 		});
 	});
 
@@ -232,7 +241,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: "test_relative_position",
+						relativeToFocusIds: ["test_relative_position"],
 					},
 					prerequiredFocusIds: {
 						allOf: [
@@ -248,7 +257,8 @@ describe("JominiFocusTreeParser", async () => {
 					},
 				},
 			],
-			additionalProperties: {},
+			additionalFocusTreeProperties: {},
+			additionalGlobalProperties: {},
 		});
 	});
 	test("Focus tree with additional properties with one minimal focus", async () => {
@@ -283,7 +293,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: null,
+						relativeToFocusIds: [],
 					},
 					prerequiredFocusIds: {
 						allOf: [],
@@ -291,7 +301,7 @@ describe("JominiFocusTreeParser", async () => {
 					additionalProperties: {},
 				},
 			],
-			additionalProperties: {
+			additionalFocusTreeProperties: {
 				country: {
 					factor: 0,
 					modifier: {
@@ -303,19 +313,8 @@ describe("JominiFocusTreeParser", async () => {
 					},
 				},
 			},
+			additionalGlobalProperties: {},
 		});
-	});
-
-	test("Focus tree with a forbidden field", async () => {
-		const jominiFocusTreeParser = await createJominiFocusTreeParser();
-
-		expect(() =>
-			jominiFocusTreeParser.parseFocusTreeFromString(`
-				focus_tree = {
-				}
-				something_bad = "test"
-			`)
-		).toThrow();
 	});
 
 	test("Minimal focus tree with multiple minimal focuses", async () => {
@@ -343,7 +342,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: null,
+						relativeToFocusIds: [],
 					},
 					prerequiredFocusIds: {
 						allOf: [],
@@ -355,7 +354,7 @@ describe("JominiFocusTreeParser", async () => {
 					position: {
 						x: 0,
 						y: 0,
-						relativeToFocusId: null,
+						relativeToFocusIds: [],
 					},
 					prerequiredFocusIds: {
 						allOf: [],
@@ -363,7 +362,34 @@ describe("JominiFocusTreeParser", async () => {
 					additionalProperties: {},
 				},
 			],
-			additionalProperties: {},
+			additionalFocusTreeProperties: {},
+			additionalGlobalProperties: {},
 		});
 	});
+
+	const inGameFocusTreesFileNamesWithFileContent = await fs
+		.readdir(path.join(path.dirname(url.fileURLToPath(import.meta.url)), "test_focus_trees"))
+		.then((fileNames) =>
+			Promise.all(
+				fileNames.map((fileName) =>
+					fs
+						.readFile(
+							path.join(
+								path.dirname(url.fileURLToPath(import.meta.url)),
+								"test_focus_trees",
+								fileName
+							),
+							"utf8"
+						)
+						.then((fileContent) => [fileName, fileContent])
+				)
+			)
+		);
+	test.each(inGameFocusTreesFileNamesWithFileContent)(
+		"Focus tree from in-game files %s",
+		async (fileName, inGameFocusTreeAsString) => {
+			const jominiFocusTreeParser = await createJominiFocusTreeParser();
+			jominiFocusTreeParser.parseFocusTreeFromString(inGameFocusTreeAsString);
+		}
+	);
 });
