@@ -1,20 +1,6 @@
-export type FocusPosition = {
-	x: number;
-	y: number;
-	relativeToFocusId: string | null;
-};
-
-export type Focus = {
-	id: string;
-	position: FocusPosition;
-	prerequiredFocusIds: string[];
-
-	additionalProperties: Record<string, unknown>;
-};
-
-export type FocusTree = {
-	id: string;
-	focuses: Focus[];
-
-	additionalProperties: Record<string, unknown>;
-};
+import DedicatedFocusTree from "./DedicatedFocusTree.js";
+import type FocusTreeSerializerVisitor from "./FocusTreeSerializerVisitor.js";
+import SharedFocusTree from "./SharedFocusTree.js";
+export * from "./types.js";
+export {DedicatedFocusTree, FocusTree, type FocusTreeSerializerVisitor, SharedFocusTree};
+import FocusTree from "./FocusTree.js";
